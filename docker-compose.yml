@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: share_lock_app
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://share_lock_user:share_lock_password@postgres:5432/share_lock_db
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - share_lock_network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    container_name: share_lock_postgres
+    environment:
+      - POSTGRES_DB=share_lock_db
+      - POSTGRES_USER=share_lock_user
+      - POSTGRES_PASSWORD=share_lock_password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - share_lock_network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U share_lock_user -d share_lock_db']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: share_lock_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - share_lock_network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # pgAdmin (opcional - para gerenciar PostgreSQL)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: share_lock_pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@sharelock.com
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+    ports:
+      - '8080:80'
+    depends_on:
+      - postgres
+    networks:
+      - share_lock_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  share_lock_network:
+    driver: bridge
