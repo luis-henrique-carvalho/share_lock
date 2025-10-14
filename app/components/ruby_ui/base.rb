@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "tailwind_merge"
 
 module RubyUI

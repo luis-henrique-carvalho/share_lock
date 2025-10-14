@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module RubyUI
   extend Phlex::Kit
 end
@@ -11,7 +9,7 @@ Rails.autoloaders.main.inflector.inflect(
 
 # Allow using RubyUI::ComponentName instead Components::RubyUI::ComponentName
 Rails.autoloaders.main.push_dir(
-  Rails.root.join("app/components/ruby_ui"), namespace: RubyUI
+  "#{Rails.root}/app/components/ruby_ui", namespace: RubyUI
 )
 
 # Allow using RubyUI::ComponentName instead RubyUI::ComponentName::ComponentName

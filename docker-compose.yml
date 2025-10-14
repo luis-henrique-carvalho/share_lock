@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  share-lock-db:
+    image: postgres:17
+    container_name: share-lock-db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-share_lock_development}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - share-lock-network
+
+networks:
+  share-lock-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
