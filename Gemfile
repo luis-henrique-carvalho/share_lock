@@ -57,6 +57,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Annotate models, routes, etc. with schema information (Rails 8 compatible)
+  gem "annotaterb"
 end
 
 group :test do
@@ -68,3 +71,6 @@ end
 gem "phlex-rails", "~> 2.3"
 
 gem "tailwind_merge", "~> 1.3"
+
+# Authentication
+gem "devise"
