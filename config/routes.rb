@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users,
+  path: "users/auth",
+  controllers: {
+    sessions: "users/auth/sessions",
+    registrations: "users/auth/registrations",
+    passwords: "users/auth/passwords",
+    confirmations: "users/auth/confirmations",
+    unlocks: "users/auth/unlocks"
+  }
   get "home", to: "home#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
