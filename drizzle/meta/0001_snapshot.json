@@ -1,6 +1,6 @@
 {
-  "id": "57da5b88-d54c-4f36-b17d-ed820b2dea46",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "81dd7fa0-6a6a-4f6e-821f-8a522d527860",
+  "prevId": "57da5b88-d54c-4f36-b17d-ed820b2dea46",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -200,7 +200,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
