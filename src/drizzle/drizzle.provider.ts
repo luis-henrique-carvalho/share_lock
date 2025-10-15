@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from './schema';
@@ -12,6 +13,7 @@ export const drizzleProvider = [
     useFactory: (
       configService: ConfigService,
     ): NodePgDatabase<typeof schema> => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const connectionString = configService.get<string>('DATABASE_URL');
 
       if (!connectionString) {
