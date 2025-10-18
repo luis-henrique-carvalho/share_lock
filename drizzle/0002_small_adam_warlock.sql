@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "idx_user_campaign_title" ON "campaign" USING btree ("user_id","title");

@@ -98,6 +98,7 @@ export const campaign = pgTable(
   },
   (table) => [
     index('idx_title').on(table.title),
+    uniqueIndex('idx_user_campaign_title').on(table.userId, table.title),
     index('idx_status').on(table.status),
   ],
 );
