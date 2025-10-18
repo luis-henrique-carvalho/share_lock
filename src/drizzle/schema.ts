@@ -85,7 +85,7 @@ export const campaign = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     title: text('title').notNull(),
     description: text('description').notNull(),
-    imageUrl: text('image_url').notNull(),
+    imageUrl: text('image_url'),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
