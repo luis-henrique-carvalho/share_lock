@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1760527880053,
-      "tag": "0000_thin_sheva_callister",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1760527904003,
-      "tag": "0001_sloppy_squadron_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1760527920939,
-      "tag": "0002_special_madame_masque",
+      "when": 1760818157458,
+      "tag": "0000_puzzling_captain_cross",
       "breakpoints": true
     }
   ]
