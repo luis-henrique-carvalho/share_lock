@@ -31,6 +31,14 @@ export class CampainsController {
     return this.campainsService.create(createCampainDto, session.user.id);
   }
 
+  @Post(':id/activate')
+  activate(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Session() session: UserSession,
+  ) {
+    return this.campainsService.activate(id, session.user.id);
+  }
+
   @Get()
   findAll(@Session() session: UserSession) {
     return this.campainsService.findAll(session.user.id);

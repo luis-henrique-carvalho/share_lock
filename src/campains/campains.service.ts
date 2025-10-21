@@ -30,10 +30,28 @@ export class CampainsService {
       .returning();
 
     await this.cache.set(`campaign:${campaign.id}`, campaign, 300);
-
     await this.cache.del(`campaigns:user:${userId}`);
 
     return campaign;
+  }
+
+  async activate(id: string, userId: string) {
+    const campaign = await this.findOne(id, userId);
+
+    if (campaign.status === 'active') {
+      return campaign;
+    }
+
+    const [updatedCampaign] = await this.db
+      .update(schema.campaign)
+      .set({ status: 'active' })
+      .where(eq(schema.campaign.id, id))
+      .returning();
+
+    await this.cache.set(`campaign:${id}`, updatedCampaign, 300);
+    await this.cache.del(`campaigns:user:${userId}`);
+
+    return updatedCampaign;
   }
 
   async findAll(userId: string) {
@@ -85,7 +103,6 @@ export class CampainsService {
       .returning();
 
     await this.cache.set(`campaign:${id}`, updatedCampaign, 300);
-
     await this.cache.del(`campaigns:user:${userId}`);
 
     return updatedCampaign;
