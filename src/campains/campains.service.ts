@@ -1,17 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCampainDto } from './dto/create-campain.dto';
 import { UpdateCampainDto } from './dto/update-campain.dto';
-import { DrizzleAsyncProvider } from 'src/drizzle/drizzle.provider';
+import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from 'src/drizzle/schema';
+import * as schema from 'src/common/drizzle/schema';
 import { Inject } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
+import { CacheService } from 'src/common/cache/cache.service';
 
 @Injectable()
 export class CampainsService {
   constructor(
     @Inject(DrizzleAsyncProvider)
     private db: NodePgDatabase<typeof schema>,
+
+    @Inject(CacheService)
+    private cache: CacheService,
   ) {}
 
   async create(createCampainDto: CreateCampainDto, userId: string) {
@@ -25,6 +29,8 @@ export class CampainsService {
       })
       .returning();
 
+    await this.cache.set(`campaign:${campaign.id}`, campaign, 300);
+
     return campaign;
   }
 
@@ -36,6 +42,11 @@ export class CampainsService {
   }
 
   async findOne(id: string, userId: string) {
+    const cacheKey = `campaign:${id}`;
+    const cached = await this.cache.get<typeof schema.campaign>(cacheKey);
+
+    if (cached) return cached;
+
     const campaign = await this.db
       .select()
       .from(schema.campaign)
@@ -48,6 +59,8 @@ export class CampainsService {
     if (!campaign) {
       throw new NotFoundException(`Campanha com ID ${id} não encontrada.`);
     }
+
+    await this.cache.set(cacheKey, campaign, 300);
 
     return campaign;
   }

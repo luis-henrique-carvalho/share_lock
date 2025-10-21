@@ -12,7 +12,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - DATABASE_URL=postgresql://share_lock_user:share_lock_password@postgres:5432/share_lock_db
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:share_lock_password@redis:6379
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,13 +54,15 @@ services:
       - redis_data:/data
     networks:
       - share_lock_network
+    environment:
+    - REDIS_PASSWORD=share_lock_password
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
     restart: unless-stopped
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --requirepass share_lock_password
 
 volumes:
   postgres_data:
