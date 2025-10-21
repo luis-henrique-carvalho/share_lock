@@ -19,8 +19,6 @@ export class DrizzleExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    this.logger.error({ cause: exception.cause });
-
     const errors = getDbErrorMessage(exception);
 
     const status = errors.some((e) => e.field !== 'global')
