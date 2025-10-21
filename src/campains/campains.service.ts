@@ -31,14 +31,24 @@ export class CampainsService {
 
     await this.cache.set(`campaign:${campaign.id}`, campaign, 300);
 
+    await this.cache.del(`campaigns:user:${userId}`);
+
     return campaign;
   }
 
   async findAll(userId: string) {
-    return this.db
+    const cacheKey = `campaigns:user:${userId}`;
+    const cached = await this.cache.get<(typeof schema.campaign)[]>(cacheKey);
+    if (cached) return cached;
+
+    const campains = await this.db
       .select()
       .from(schema.campaign)
       .where(eq(schema.campaign.userId, userId));
+
+    await this.cache.set(cacheKey, campains, 300);
+
+    return campains;
   }
 
   async findOne(id: string, userId: string) {
@@ -74,6 +84,10 @@ export class CampainsService {
       .where(eq(schema.campaign.id, id))
       .returning();
 
+    await this.cache.set(`campaign:${id}`, updatedCampaign, 300);
+
+    await this.cache.del(`campaigns:user:${userId}`);
+
     return updatedCampaign;
   }
 
@@ -81,5 +95,8 @@ export class CampainsService {
     await this.findOne(id, userId);
 
     await this.db.delete(schema.campaign).where(eq(schema.campaign.id, id));
+
+    await this.cache.del(`campaign:${id}`);
+    await this.cache.del(`campaigns:user:${userId}`);
   }
 }
