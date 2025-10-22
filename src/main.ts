@@ -8,6 +8,7 @@ import { DrizzleExceptionFilter } from './common/filters/drizzle-exception.filte
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false,
+    logger: ['verbose'],
   });
   const port = process.env.PORT ?? 3000;
 
