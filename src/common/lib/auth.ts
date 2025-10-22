@@ -1,8 +1,8 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { createDrizzleInstance } from '../common/drizzle/drizzle.provider';
+import { createDrizzleInstance } from '../drizzle/drizzle.provider';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../common/drizzle/schema';
+import * as schema from '../drizzle/schema';
 import { randomUUID } from 'crypto';
 
 const db: NodePgDatabase<typeof schema> = createDrizzleInstance();

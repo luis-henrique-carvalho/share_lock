@@ -9,7 +9,7 @@ import { and, eq } from 'drizzle-orm';
 import { CacheService } from 'src/common/cache/cache.service';
 
 @Injectable()
-export class CampainsService {
+export class CampaignsService {
   constructor(
     @Inject(DrizzleAsyncProvider)
     private db: NodePgDatabase<typeof schema>,
@@ -59,14 +59,14 @@ export class CampainsService {
     const cached = await this.cache.get<(typeof schema.campaign)[]>(cacheKey);
     if (cached) return cached;
 
-    const campains = await this.db
+    const campaigns = await this.db
       .select()
       .from(schema.campaign)
       .where(eq(schema.campaign.userId, userId));
 
-    await this.cache.set(cacheKey, campains, 300);
+    await this.cache.set(cacheKey, campaigns, 300);
 
-    return campains;
+    return campaigns;
   }
 
   async findOne(id: string, userId: string) {

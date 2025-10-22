@@ -11,17 +11,17 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { CampainsService } from './campains.service';
+import { CampaignsService } from './campaigns.service';
 import { CreateCampainDto } from './dto/create-campain.dto';
 import { UpdateCampainDto } from './dto/update-campain.dto';
 
 import { AuthGuard, Session } from '@thallesp/nestjs-better-auth';
 import type { UserSession } from '@thallesp/nestjs-better-auth';
 
-@Controller('campains')
+@Controller()
 @UseGuards(AuthGuard)
-export class CampainsController {
-  constructor(private readonly campainsService: CampainsService) {}
+export class CampaignsController {
+  constructor(private readonly campainsService: CampaignsService) {}
 
   @Post()
   create(

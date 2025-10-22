@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CampainsService } from './campains.service';
+import { CampaignsService } from './campaigns.service';
 import { CacheService } from '../common/cache/cache.service';
 import { DrizzleAsyncProvider } from '../common/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -7,8 +7,8 @@ import * as schema from '../common/drizzle/schema';
 
 import { CreateCampainDto } from './dto/create-campain.dto';
 
-describe('CampainsService', () => {
-  let service: CampainsService;
+describe('CampaignsService', () => {
+  let service: CampaignsService;
   let mockDb: {
     insert: jest.Mock;
     select: jest.Mock;
@@ -58,7 +58,7 @@ describe('CampainsService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        CampainsService,
+        CampaignsService,
         {
           provide: DrizzleAsyncProvider,
           useValue: mockDb as unknown as NodePgDatabase<typeof schema>,
@@ -70,7 +70,7 @@ describe('CampainsService', () => {
       ],
     }).compile();
 
-    service = module.get<CampainsService>(CampainsService);
+    service = module.get<CampaignsService>(CampaignsService);
   });
 
   it('should be defined', () => {

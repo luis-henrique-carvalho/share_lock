@@ -34,7 +34,7 @@ Use these notes to be productive immediately in this NestJS + Drizzle + Redis co
 ## Caching pattern
 
 - Use `CacheService` (DI provided by `CacheModule`). Methods: `set(key, value, ttl)`, `get<T>(key)`, `del(key)`.
-- Common keys and TTLs (examples from `CampainsService`):
+- Common keys and TTLs (examples from `CampaignsService`):
   - `campaign:${id}` (TTL 300s), `campaigns:user:${userId}`. Invalidate list keys on create/update/delete.
 
 ## Error handling & responses
@@ -44,10 +44,10 @@ Use these notes to be productive immediately in this NestJS + Drizzle + Redis co
 
 ## API/module conventions
 
-- Feature modules follow `campains/` as an example: `*.module.ts`, `*.service.ts`, `*.controller.ts`, `dto/*`, `entities/*`.
+- Feature modules follow `campaigns/` as an example: `*.module.ts`, `*.service.ts`, `*.controller.ts`, `dto/*`, `entities/*`.
 - Controllers:
   - Validate inputs with DTOs (`class-validator`); parse ids with `ParseUUIDPipe`.
-  - Use auth guard and session injection. Example in `campains.controller.ts`.
+  - Use auth guard and session injection. Example in `campaigns.controller.ts`.
 - Services:
   - Inject DB and Cache; invalidate cache on writes; prefer typed schema imports: `import * as schema from 'src/common/drizzle/schema'`.
 
