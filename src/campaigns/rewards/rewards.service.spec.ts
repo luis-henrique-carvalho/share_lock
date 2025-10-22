@@ -46,8 +46,6 @@ describe('RewardsService', () => {
       values: mockValues,
     });
 
-    // Mock encadeamento select().from().where().limit().then()
-
     const mockSelectChain = {
       from: jest.fn().mockReturnThis(),
       where: jest.fn().mockReturnThis(),

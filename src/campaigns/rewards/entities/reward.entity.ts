@@ -1,11 +1,7 @@
-export class Reward {
-  id: number;
-  campaignId: string;
-  title: string;
-  description: string;
-  type: 'file' | 'link' | 'coupon_code' | 'text';
-  content: string;
-  goalAmount: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import * as schema from 'src/common/drizzle/schema';
+
+type Campaign = typeof schema.campaign.$inferSelect;
+
+type CampaignInsert = typeof schema.campaign.$inferInsert;
+
+export { Campaign, CampaignInsert };
