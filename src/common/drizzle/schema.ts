@@ -11,6 +11,7 @@ import {
   pgEnum,
   integer,
 } from 'drizzle-orm/pg-core';
+import { randomBytes } from 'crypto';
 
 export const user = pgTable('user', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -86,6 +87,7 @@ export const campaign = pgTable(
     title: text('title').notNull(),
     description: text('description').notNull(),
     imageUrl: text('image_url'),
+    slug: text('slug').$defaultFn(() => randomBytes(8).toString('hex')),
     userId: uuid('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
@@ -100,6 +102,7 @@ export const campaign = pgTable(
     index('idx_title').on(table.title),
     uniqueIndex('idx_user_campaign_title').on(table.userId, table.title),
     index('idx_status').on(table.status),
+    uniqueIndex('idx_user_campaign_slug').on(table.userId, table.slug),
   ],
 );
 
@@ -158,6 +161,10 @@ export const lead = pgTable(
       .references(() => campaign.id, { onDelete: 'cascade' }),
     email: text('email').notNull(),
     name: text('name'),
+    referralCode: text('referral_code')
+      .notNull()
+      .unique()
+      .$defaultFn(() => randomBytes(8).toString('hex')),
 
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
@@ -171,6 +178,10 @@ export const lead = pgTable(
   (table) => [
     index('idx_campaign_email').on(table.campaignId, table.email),
     index('idx_campaign_id').on(table.campaignId),
+    uniqueIndex('idx_lead_referral_code').on(
+      table.referralCode,
+      table.campaignId,
+    ),
   ],
 );
 
