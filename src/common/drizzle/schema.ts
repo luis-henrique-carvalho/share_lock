@@ -152,6 +152,12 @@ export const rewardRelations = relations(reward, ({ one }) => ({
   }),
 }));
 
+export const leadStatusEnum = pgEnum('lead_status', [
+  'new',
+  'contacted',
+  'converted',
+]);
+
 export const lead = pgTable(
   'lead',
   {
@@ -165,6 +171,8 @@ export const lead = pgTable(
       .notNull()
       .unique()
       .$defaultFn(() => randomBytes(8).toString('hex')),
+
+    status: leadStatusEnum('status').default('new').notNull(),
 
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()

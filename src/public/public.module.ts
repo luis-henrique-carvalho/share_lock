@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { RouterModule } from '@nestjs/core';
 import { CampaignsModule } from './campaigns/campaigns.module';
+import { LeadsModule } from './leads/leads.module';
 
 @Module({
   imports: [
@@ -15,10 +16,15 @@ import { CampaignsModule } from './campaigns/campaigns.module';
             path: 'campaigns',
             module: CampaignsModule,
           },
+          {
+            path: ':campaign_slug/leads',
+            module: LeadsModule,
+          },
         ],
       },
     ]),
     CampaignsModule,
+    LeadsModule,
   ],
 })
 export class PublicModule {}

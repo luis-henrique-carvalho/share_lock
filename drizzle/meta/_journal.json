@@ -29,6 +29,13 @@
       "when": 1761262505366,
       "tag": "0003_graceful_chronomancer",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1761273329867,
+      "tag": "0004_minor_masque",
+      "breakpoints": true
     }
   ]
 }
