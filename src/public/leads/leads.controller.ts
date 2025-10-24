@@ -1,6 +1,7 @@
-import { Body, Controller, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller()
 export class LeadsController {
@@ -13,5 +14,18 @@ export class LeadsController {
     @Query('ref') referralCode?: string,
   ) {
     return this.leadsService.create(campaignSlug, createLeadDto, referralCode);
+  }
+
+  @Post('verify-email')
+  verifyEmail(@Body() verifyEmailDto: VerifyEmailDto) {
+    return this.leadsService.verifyEmail(verifyEmailDto.token);
+  }
+
+  @Get('rewards/:referral_code')
+  getRewards(
+    @Param('campaign_slug') campaignSlug: string,
+    @Param('referral_code') referralCode: string,
+  ) {
+    return this.leadsService.getLeadRewards(campaignSlug, referralCode);
   }
 }

@@ -174,6 +174,14 @@ export const lead = pgTable(
 
     status: leadStatusEnum('status').default('new').notNull(),
 
+    emailVerified: boolean('email_verified').default(false).notNull(),
+    verificationToken: text('verification_token')
+      .unique()
+      .$defaultFn(() => randomBytes(32).toString('hex')),
+    verificationTokenExpiresAt: timestamp('verification_token_expires_at', {
+      withTimezone: true,
+    }),
+
     createdAt: timestamp('created_at', { withTimezone: true })
       .defaultNow()
       .notNull(),
@@ -190,6 +198,7 @@ export const lead = pgTable(
       table.referralCode,
       table.campaignId,
     ),
+    index('idx_verification_token').on(table.verificationToken),
   ],
 );
 
