@@ -56,6 +56,7 @@ describe('RewardsService', () => {
             id: 'campaign-123',
             title: 'Test Campaign',
             description: 'A test campaign',
+            slug: 'test-campaign',
             imageUrl: 'http://example.com/image.png',
             status: 'draft',
             userId: 'user-123',
