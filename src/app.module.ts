@@ -4,6 +4,7 @@ import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { auth } from './common/lib/auth';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { PublicModule } from './public/public.module';
+import { LeadsModule } from './leads/leads.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { PublicModule } from './public/public.module';
     AuthModule.forRoot(auth),
     CampaignsModule,
     PublicModule,
+    LeadsModule,
   ],
   providers: [],
 })
