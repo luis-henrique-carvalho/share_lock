@@ -12,6 +12,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateCampainDto } from './dto/create-campain.dto';
 import { UpdateCampainDto } from './dto/update-campain.dto';
 
@@ -20,6 +21,8 @@ import type { UserSession } from '@thallesp/nestjs-better-auth';
 
 @Controller()
 @UseGuards(AuthGuard)
+@ApiTags('Private - Campaigns')
+@ApiBearerAuth()
 export class CampaignsController {
   constructor(private readonly campainsService: CampaignsService) {}
 

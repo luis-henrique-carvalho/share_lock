@@ -9,9 +9,12 @@ import {
 import { LeadsService } from './leads.service';
 import { AuthGuard, Session } from '@thallesp/nestjs-better-auth';
 import type { UserSession } from '@thallesp/nestjs-better-auth';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller()
 @UseGuards(AuthGuard)
+@ApiTags('Private - Leads')
+@ApiBearerAuth()
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 

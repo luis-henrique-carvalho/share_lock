@@ -13,6 +13,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { RewardsService } from './rewards.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateRewardDto } from './dto/create-reward.dto';
 import { UpdateRewardDto } from './dto/update-reward.dto';
 import { AuthGuard, Session } from '@thallesp/nestjs-better-auth';
@@ -20,6 +21,8 @@ import type { UserSession } from '@thallesp/nestjs-better-auth';
 
 @Controller()
 @UseGuards(AuthGuard)
+@ApiTags('Private - Rewards')
+@ApiBearerAuth()
 export class RewardsController {
   constructor(private readonly rewardsService: RewardsService) {}
 

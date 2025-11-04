@@ -1,9 +1,11 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Controller()
+@ApiTags('Public - Leads')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 

@@ -4,6 +4,7 @@ import { createDrizzleInstance } from '../drizzle/drizzle.provider';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from '../drizzle/schema';
 import { randomUUID } from 'crypto';
+import { bearer } from 'better-auth/plugins';
 
 const db: NodePgDatabase<typeof schema> = createDrizzleInstance();
 
@@ -12,6 +13,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: 'pg', schema }),
   emailAndPassword: { enabled: true },
   user: { modelName: 'user' },
+  plugins: [bearer()],
   advanced: {
     database: {
       generateId: () => randomUUID(),
