@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
@@ -10,6 +10,11 @@ export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
   @Post()
+  @ApiQuery({
+    name: 'ref',
+    required: false,
+    type: 'string',
+  })
   create(
     @Body() createLeadDto: CreateLeadDto,
     @Param('campaign_slug') campaignSlug: string,
