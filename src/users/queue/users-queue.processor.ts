@@ -18,12 +18,16 @@ export class UsersQueueProcessor {
         to: job.data.email,
         from: 'Equipe ShareLock <noreply@sharelock.com>',
         subject: 'Bem-vindo ao ShareLock! 🎉',
-        html: `
-          <h1>Olá ${job.data.name}! 👋</h1>
-          <p>Bem-vindo ao <strong>ShareLock</strong>!</p>
-          <p>Estamos felizes em tê-lo conosco.</p>
-        `,
-        text: `Olá ${job.data.name}, bem-vindo ao ShareLock!`,
+        template: 'welcome',
+        context: {
+          name: job.data.name,
+          year: new Date().getFullYear(),
+          ctaUrl: process.env.APP_URL || 'https://sharelock.com',
+          supportUrl: 'mailto:suporte@sharelock.com',
+          instagramUrl: 'https://instagram.com/sharelock',
+          twitterUrl: 'https://twitter.com/sharelock',
+          unsubscribeUrl: `${process.env.APP_URL}/unsubscribe`,
+        },
       });
 
       this.logger.log(`Welcome email sent successfully to: ${job.data.email}`);

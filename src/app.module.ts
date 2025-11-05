@@ -7,7 +7,10 @@ import { PublicModule } from './public/public.module';
 import { LeadsModule } from './leads/leads.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { UsersModule } from './users/users.module';
+import * as path from 'path';
+import './common/helpers/handlebars.helpers';
 
 @Module({
   imports: [
@@ -27,6 +30,30 @@ import { UsersModule } from './users/users.module';
         auth: {
           user: process.env.MAIL_USER,
           pass: process.env.MAIL_PASS,
+        },
+      },
+      defaults: {
+        from: '"ShareLock" <noreply@sharelock.com>',
+      },
+      template: {
+        dir: path.join(process.cwd(), 'src', 'common', 'templates', 'emails'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+      options: {
+        partials: {
+          dir: path.join(
+            process.cwd(),
+            'src',
+            'common',
+            'templates',
+            'partials',
+          ),
+          options: {
+            strict: true,
+          },
         },
       },
     }),
