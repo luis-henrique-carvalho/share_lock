@@ -5,7 +5,6 @@ import { auth } from './common/lib/auth';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { PublicModule } from './public/public.module';
 import { LeadsModule } from './leads/leads.module';
-import { QueueModule } from './common/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { UsersModule } from './users/users.module';
@@ -35,7 +34,6 @@ import { UsersModule } from './users/users.module';
     CampaignsModule,
     PublicModule,
     LeadsModule,
-    QueueModule,
     UsersModule,
   ],
 })
