@@ -8,6 +8,7 @@ import { LeadsModule } from './leads/leads.module';
 import { QueueModule } from './common/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     PublicModule,
     LeadsModule,
     QueueModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

@@ -14,6 +14,7 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   user: { modelName: 'user' },
   plugins: [bearer()],
+  hooks: {},
   advanced: {
     database: {
       generateId: () => randomUUID(),
