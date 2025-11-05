@@ -7,21 +7,30 @@ import { PublicModule } from './public/public.module';
 import { LeadsModule } from './leads/leads.module';
 import { QueueModule } from './common/queue/queue.module';
 import { BullModule } from '@nestjs/bull';
-import { ConfigService } from '@nestjs/config';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    BullModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get<string>('REDIS_HOST') || 'localhost',
-          port: configService.get<number>('REDIS_PORT') || 6379,
-        },
-      }),
-      inject: [ConfigService],
+    BullModule.forRoot({
+      redis: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+        password: process.env.REDIS_PASSWORD,
+      },
     }),
-    AuthModule.forRoot(auth),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.MAIL_HOST,
+        port: Number(process.env.MAIL_PORT),
+        secure: false,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      },
+    }),
+    AuthModule.forRoot({ auth }),
     CampaignsModule,
     PublicModule,
     LeadsModule,

@@ -23,6 +23,7 @@
     "studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bull": "^11.0.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
@@ -38,6 +39,7 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.6",
     "ioredis": "^5.8.1",
+    "nodemailer": "^7.0.10",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
