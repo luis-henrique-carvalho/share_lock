@@ -10,12 +10,15 @@ import { eq, and, count } from 'drizzle-orm';
 import * as schema from 'src/common/drizzle/schema';
 import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { CreateLeadDto } from './dto/create-lead.dto';
+import { PublicLeadsQueueService } from './queue/public-leads-queue.service';
 
 @Injectable()
 export class LeadsService {
   constructor(
     @Inject(DrizzleAsyncProvider)
     private db: NodePgDatabase<typeof schema>,
+
+    private publicLeadsQueue: PublicLeadsQueueService,
   ) {}
 
   async create(
@@ -43,17 +46,12 @@ export class LeadsService {
       }
     }
 
-    // envio de email
-    // await this.mailerService.sendMail({
-    //   to: lead.email,
-    //   subject: `Welcome to the campaign ${campaign.title}`,
-    //   template: 'welcome-lead', // nome do template de email
-    //   context: {
-    //     name: lead.name,
-    //     campaignTitle: campaign.title,
-    //     referralCode: lead.referralCode,
-    //   },
-    // });
+    await this.publicLeadsQueue.sendWelcomeLeadEmail({
+      email: lead.email,
+      name: lead.name || '',
+      campaignTitle: campaign.title,
+      referralCode: lead.referralCode,
+    });
 
     return {
       success: true,

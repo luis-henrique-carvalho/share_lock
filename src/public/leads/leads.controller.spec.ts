@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LeadsController } from './leads.controller';
 import { LeadsService } from './leads.service';
 import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
+import { PublicLeadsQueueService } from './queue/public-leads-queue.service';
 
 describe('LeadsController', () => {
   let controller: LeadsController;
@@ -14,6 +15,12 @@ describe('LeadsController', () => {
         {
           provide: DrizzleAsyncProvider,
           useValue: {},
+        },
+        {
+          provide: PublicLeadsQueueService,
+          useValue: {
+            sendWelcomeLeadEmail: jest.fn().mockResolvedValue(undefined),
+          },
         },
       ],
     }).compile();

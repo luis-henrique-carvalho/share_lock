@@ -9,6 +9,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CreateLeadDto } from './dto/create-lead.dto';
+import { PublicLeadsQueueService } from './queue/public-leads-queue.service';
 
 describe('LeadsService', () => {
   let service: LeadsService;
@@ -21,6 +22,9 @@ describe('LeadsService', () => {
       lead: { findFirst: jest.Mock };
       reward: { findMany: jest.Mock };
     };
+  };
+  let mockPublicLeadsQueue: {
+    sendWelcomeLeadEmail: jest.Mock;
   };
 
   const mockCampaign = {
@@ -99,12 +103,20 @@ describe('LeadsService', () => {
       },
     };
 
+    mockPublicLeadsQueue = {
+      sendWelcomeLeadEmail: jest.fn().mockResolvedValue(undefined),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         LeadsService,
         {
           provide: DrizzleAsyncProvider,
           useValue: mockDb as unknown as NodePgDatabase<typeof schema>,
+        },
+        {
+          provide: PublicLeadsQueueService,
+          useValue: mockPublicLeadsQueue,
         },
       ],
     }).compile();
@@ -133,6 +145,12 @@ describe('LeadsService', () => {
       expect(result.referralCode).toBeDefined();
       expect(mockDb.query.campaign.findFirst).toHaveBeenCalled();
       expect(mockDb.insert).toHaveBeenCalled();
+      expect(mockPublicLeadsQueue.sendWelcomeLeadEmail).toHaveBeenCalledWith({
+        email: mockLead.email,
+        name: mockLead.name || '',
+        campaignTitle: mockCampaign.title,
+        referralCode: mockLead.referralCode,
+      });
     });
 
     it('should throw NotFoundException if campaign not found', async () => {
