@@ -51,6 +51,8 @@ export class LeadsService {
       name: lead.name || '',
       campaignTitle: campaign.title,
       referralCode: lead.referralCode,
+      verificationToken: lead.verificationToken!,
+      campaignSlug,
     });
 
     return {

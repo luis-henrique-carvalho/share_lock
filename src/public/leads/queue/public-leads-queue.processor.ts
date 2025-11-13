@@ -23,7 +23,8 @@ export class PublicLeadsQueueProcessor {
         context: {
           name: job.data.name,
           campaignTitle: job.data.campaignTitle,
-          referralCode: job.data.referralCode,
+          referralLink: `${process.env.FRONTEND_URL}/public/campaigns/${job.data.campaignSlug}?ref=${job.data.referralCode}`,
+          verifyTokenURL: `${process.env.FRONTEND_URL}/public/campaigns/${job.data.campaignSlug}/verify-email?token=${job.data.verificationToken}`,
         },
       });
     } catch (error) {

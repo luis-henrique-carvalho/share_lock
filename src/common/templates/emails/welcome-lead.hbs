@@ -1,0 +1,75 @@
+<html lang='pt-BR'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Bem-vindo à Campanha ShareLock!</title>
+    {{> styles}}
+  </head>
+  <body>
+    <div class='container'>
+      {{> header emoji='🎉'}}
+
+      <div class='content'>
+        <div class='greeting'>
+          Olá
+          {{name}}!
+          <span class='emoji'>👋</span>
+        </div>
+
+        <div class='message'>
+          <p>Bem-vindo à campanha
+            <strong>{{campaignTitle}}</strong>! Estamos muito felizes em tê-lo
+            conosco.</p>
+
+          <p>Você está a apenas
+            <span class='highlight'>um passo</span>
+            de começar a participar e conquistar recompensas incríveis!</p>
+        </div>
+
+        <div class='campaign-box'>
+          <div class='campaign-title'>📢 Sua Campanha</div>
+          <p style='margin: 5px 0; color: #34495e;'>{{campaignTitle}}</p>
+        </div>
+
+        <div class='referral-link'>
+          <div class='referral-link-label'>Seu link de Indicação</div>
+          <div class='referral-link-value'>{{referralLink}}</div>
+          <p style='font-size: 13px; color: #6c757d; margin-top: 10px;'>
+            Compartilhe este link para ganhar pontos!
+          </p>
+        </div>
+
+        <div style='text-align: center; margin: 35px 0;'>
+          <p style='font-size: 18px; margin-bottom: 20px; color: #2c3e50;'>
+            <strong>Confirme seu email para começar</strong>
+          </p>
+          <a href='{{verifyTokenURL}}' class='cta-button'>
+            ✅ Verificar Email
+          </a>
+        </div>
+
+        <div class='benefits-list'>
+          <p style='font-weight: 600; margin-bottom: 10px; color: #2c3e50;'>
+            🎁 O que você pode fazer:
+          </p>
+          <ul>
+            <li>🔗 Compartilhar a campanha com seus amigos</li>
+            <li>📊 Acompanhar suas indicações em tempo real</li>
+            <li>🏆 Desbloquear recompensas exclusivas</li>
+            <li>🎯 Subir no ranking da campanha</li>
+          </ul>
+        </div>
+
+        <div class='message'>
+          <p style='color: #6c757d; font-size: 14px;'>
+            <strong>Importante:</strong>
+            Este link de verificação é válido por tempo limitado. Se você não
+            solicitou este cadastro, pode ignorar este email.
+          </p>
+        </div>
+      </div>
+
+      {{> footer year=year}}
+    </div>
+  </body>
+</html>

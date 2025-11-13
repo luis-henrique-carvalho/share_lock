@@ -1,26 +1,26 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: share_lock_app
-    ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - DATABASE_URL=postgresql://share_lock_user:share_lock_password@postgres:5432/share_lock_db
-      - REDIS_URL=redis://:share_lock_password@redis:6379
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - share_lock_network
-    restart: unless-stopped
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: share_lock_app
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=3000
+  #     - DATABASE_URL=postgresql://share_lock_user:share_lock_password@postgres:5432/share_lock_db
+  #     - REDIS_URL=redis://:share_lock_password@redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - share_lock_network
+  #   restart: unless-stopped
 
   # PostgreSQL Database
   postgres:

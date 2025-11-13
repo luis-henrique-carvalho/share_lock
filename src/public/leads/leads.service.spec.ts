@@ -150,6 +150,8 @@ describe('LeadsService', () => {
         name: mockLead.name || '',
         campaignTitle: mockCampaign.title,
         referralCode: mockLead.referralCode,
+        verificationToken: mockLead.verificationToken,
+        campaignSlug: 'test-campaign',
       });
     });
 

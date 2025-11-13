@@ -23,9 +23,6 @@ export class UsersQueueProcessor {
           name: job.data.name,
           year: new Date().getFullYear(),
           ctaUrl: process.env.APP_URL || 'https://sharelock.com',
-          supportUrl: 'mailto:suporte@sharelock.com',
-          instagramUrl: 'https://instagram.com/sharelock',
-          twitterUrl: 'https://twitter.com/sharelock',
           unsubscribeUrl: `${process.env.APP_URL}/unsubscribe`,
         },
       });

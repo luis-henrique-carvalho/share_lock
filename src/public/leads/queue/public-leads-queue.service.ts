@@ -1,5 +1,5 @@
-import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 
 export interface WelcomeLeadEmailJobData {
@@ -7,6 +7,8 @@ export interface WelcomeLeadEmailJobData {
   name: string;
   campaignTitle: string;
   referralCode: string;
+  verificationToken: string;
+  campaignSlug: string;
 }
 
 @Injectable()

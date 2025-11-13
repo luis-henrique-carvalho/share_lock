@@ -47,4 +47,8 @@ Handlebars.registerHelper(
   },
 );
 
+Handlebars.registerHelper('currentYear', function () {
+  return new Date().getFullYear();
+});
+
 export default Handlebars;
