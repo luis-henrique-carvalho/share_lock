@@ -87,7 +87,6 @@ export class LeadsService {
       .update(schema.lead)
       .set({
         emailVerified: true,
-        verificationToken: null,
         verificationTokenExpiresAt: null,
       })
       .where(eq(schema.lead.id, lead.id))

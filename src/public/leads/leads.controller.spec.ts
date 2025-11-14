@@ -4,6 +4,9 @@ import { LeadsService } from './leads.service';
 import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { PublicLeadsQueueService } from './queue/public-leads-queue.service';
 
+jest.mock('@thallesp/nestjs-better-auth', () => ({
+  AllowAnonymous: () => () => undefined,
+}));
 describe('LeadsController', () => {
   let controller: LeadsController;
 

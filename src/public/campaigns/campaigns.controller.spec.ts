@@ -4,6 +4,9 @@ import { CampaignsService } from './campaigns.service';
 import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { CacheService } from 'src/common/cache/cache.service';
 
+jest.mock('@thallesp/nestjs-better-auth', () => ({
+  AllowAnonymous: () => () => undefined,
+}));
 describe('CampaignsController', () => {
   let controller: CampaignsController;
 

@@ -3,8 +3,9 @@ import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
-
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 @Controller()
+@AllowAnonymous()
 @ApiTags('Public - Leads')
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
