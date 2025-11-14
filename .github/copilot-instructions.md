@@ -58,4 +58,34 @@ Use these notes to be productive immediately in this NestJS + Drizzle + Redis co
 - Query by owner with cache:
   - Read cached list, DB fallback with `where(eq(schema.campaign.userId, userId))`, then cache for 300s.
 
-If anything here seems outdated (e.g., schema path in `drizzle.config.ts`), update the doc and config together. Share unclear areas and we’ll refine this file.
+## Testing pattern for services (\*.service.spec.ts)
+
+Follow the pattern from `leads.service.spec.ts` when creating service tests:
+
+- **Mock Drizzle query builder chains**: Mock the full chain (`select().from().innerJoin().where().limit().then()`) using Jest mocks that return chainable objects.
+- **Mock CacheService**: Provide mocks for `set`, `get`, and `del` methods with `jest.fn()`.
+- **Test structure**:
+  - Setup: Create mock DB with chainable methods (select, delete, insert, update) and mock cache.
+  - Use `Test.createTestingModule()` to inject mocked `DrizzleAsyncProvider` and `CacheService`.
+  - Clear mocks in `afterEach` with `jest.clearAllMocks()`.
+- **Test coverage areas**:
+  - Cache hits: Mock `cache.get()` to return data, verify DB is NOT called.
+  - Cache misses: Mock `cache.get()` to return `null`, verify DB query is called and result is cached.
+  - Cache invalidation: On write operations (create/update/delete), verify appropriate `cache.del()` calls.
+  - Query filters: Verify correct Drizzle query builder methods are called (don't assert on implementation details, just that queries happen).
+- **Mock data**: Create realistic mock objects matching schema types with proper TypeScript typing (e.g., `as const` for enum values).
+- **Drizzle chain mocking example**:
+  ```typescript
+  const mockLimit = jest.fn().mockReturnValue({
+    then: jest.fn().mockImplementation((callback) => callback([mockData])),
+  });
+  const mockWhere = jest.fn().mockReturnValue({ limit: mockLimit, then: ... });
+  const mockFrom = jest.fn().mockReturnValue({ innerJoin: mockInnerJoin });
+  const mockSelect = jest.fn().mockReturnValue({ from: mockFrom });
+  ```
+- **Spy usage**: Use `jest.spyOn(service, 'methodName')` to verify internal service method calls when needed.
+- **Assertions**: Check cache keys match expected patterns, TTL values are correct (300s default), and both individual and list caches are invalidated on writes.
+
+Reference `src/leads/leads.service.spec.ts` for the complete implementation pattern.
+
+If anything here seems outdated (e.g., schema path in `drizzle.config.ts`), update the doc and config together. Share unclear areas and we'll refine this file.
