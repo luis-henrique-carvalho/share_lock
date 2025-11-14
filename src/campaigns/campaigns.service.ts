@@ -108,10 +108,10 @@ export class CampaignsService {
     let imageUrl: string | undefined;
 
     if (image) {
-      if (campaign.imageUrl) {
-        await this.s3.deleteFileByUrl(campaign.imageUrl as string);
-      }
-      const { url } = await this.s3.uploadFile(image);
+      const { url } = await this.s3.uploadFile(image, {
+        existingFileUrl: campaign.imageUrl as string | null,
+        path: 'campaign-images',
+      });
       imageUrl = url;
     }
 

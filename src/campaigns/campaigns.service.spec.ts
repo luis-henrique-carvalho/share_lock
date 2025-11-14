@@ -383,7 +383,10 @@ describe('CampaignsService', () => {
 
       expect(result.title).toBe('Updated Campaign');
       expect(mockDb.update).toHaveBeenCalled();
-      expect(mockS3Service.uploadFile).toHaveBeenCalledWith(mockFile);
+      expect(mockS3Service.uploadFile).toHaveBeenCalledWith(mockFile, {
+        existingFileUrl: mockCampaign.imageUrl,
+        path: 'campaign-images',
+      });
     });
 
     it('should call findOne to verify campaign exists before update', async () => {

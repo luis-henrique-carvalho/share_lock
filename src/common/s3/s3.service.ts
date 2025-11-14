@@ -23,9 +23,14 @@ export class S3Service {
     this.bucket = this.configService.getOrThrow<string>('AWS_S3_BUCKET_NAME');
   }
 
-  async uploadFile(file: Express.Multer.File): Promise<{ url: string }> {
-    const formattedName = file.originalname.replace(/\s+/g, '-').toLowerCase();
-    const key = `${randomBytes(16).toString('hex')}-${formattedName}`;
+  async uploadFile(
+    file: Express.Multer.File,
+    options: { existingFileUrl?: string | null; path?: string } = {},
+  ): Promise<{ url: string }> {
+    const { existingFileUrl, path } = options;
+    const key =
+      this.getKeyFromUrl(existingFileUrl) ??
+      this.generateNewKey(file.originalname, path);
 
     const command = new PutObjectCommand({
       Bucket: this.bucket,
@@ -58,5 +63,33 @@ export class S3Service {
       this.logger.error(`Failed to delete file from S3: ${url}`, error);
       return;
     }
+  }
+  private getKeyFromUrl(url?: string | null): string | null {
+    if (!url) {
+      return null;
+    }
+
+    try {
+      const { pathname } = new URL(url);
+      const key = pathname.startsWith('/') ? pathname.slice(1) : pathname;
+      return key || null;
+    } catch (error) {
+      this.logger.warn(
+        `Invalid existingFileUrl provided: ${url}. Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      return null;
+    }
+  }
+
+  private generateNewKey(originalName: string, path?: string): string {
+    const formattedName = originalName.replace(/\s+/g, '-').toLowerCase();
+    const randomPart = `${randomBytes(16).toString('hex')}-${formattedName}`;
+
+    if (path) {
+      const cleanPath = path.replace(/^\/|\/$/g, '');
+      return `${cleanPath}/${randomPart}`;
+    }
+
+    return randomPart;
   }
 }
