@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { S3Service } from '../common/s3/s3.service';
 import { CampaignsService } from './campaigns.service';
 import { CacheService } from '../common/cache/cache.service';
 import { DrizzleAsyncProvider } from '../common/drizzle/drizzle.provider';
@@ -7,6 +8,7 @@ import * as schema from '../common/drizzle/schema';
 import { CreateCampainDto } from './dto/create-campain.dto';
 import { UpdateCampainDto } from './dto/update-campain.dto';
 import { NotFoundException } from '@nestjs/common';
+import { Readable } from 'stream';
 
 describe('CampaignsService', () => {
   let service: CampaignsService;
@@ -32,6 +34,14 @@ describe('CampaignsService', () => {
     userId: 'user-123',
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+
+  // Mock S3Service
+  const mockS3Service = {
+    uploadFile: jest
+      .fn()
+      .mockResolvedValue({ url: 'https://mock-s3-url.com/image.png' }),
+    deleteFileByUrl: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
@@ -113,6 +123,10 @@ describe('CampaignsService', () => {
         {
           provide: CacheService,
           useValue: mockCache as unknown as CacheService,
+        },
+        {
+          provide: S3Service,
+          useValue: mockS3Service,
         },
       ],
     }).compile();
@@ -346,10 +360,30 @@ describe('CampaignsService', () => {
         set: mockUpdateSet,
       });
 
-      const result = await service.update(campaignId, updateDto, userId);
+      // Provide a valid mock file object
+      const mockFile: Express.Multer.File = {
+        fieldname: 'image',
+        originalname: 'test.png',
+        encoding: '7bit',
+        mimetype: 'image/png',
+        size: 1234,
+        buffer: Buffer.from('mock'),
+        stream: new Readable(),
+        destination: '',
+        filename: '',
+        path: '',
+      };
+
+      const result = await service.update(
+        campaignId,
+        updateDto,
+        userId,
+        mockFile,
+      );
 
       expect(result.title).toBe('Updated Campaign');
       expect(mockDb.update).toHaveBeenCalled();
+      expect(mockS3Service.uploadFile).toHaveBeenCalledWith(mockFile);
     });
 
     it('should call findOne to verify campaign exists before update', async () => {

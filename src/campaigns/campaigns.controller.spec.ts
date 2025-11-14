@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CampaignsController } from './campaigns.controller';
 import { CampaignsService } from './campaigns.service';
 import { CacheService } from '../common/cache/cache.service';
+import { S3Service } from '../common/s3/s3.service';
 
 jest.mock('@thallesp/nestjs-better-auth', () => ({
   AuthGuard: jest.fn(),
@@ -27,6 +28,12 @@ describe('CampaignsController', () => {
         {
           provide: CacheService,
           useValue: { set: jest.fn(), get: jest.fn(), del: jest.fn() },
+        },
+        {
+          provide: S3Service,
+          useValue: {
+            uploadFile: jest.fn().mockResolvedValue({ url: 'mock-url' }),
+          },
         },
       ],
     }).compile();

@@ -10,7 +10,10 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CampaignsService } from './campaigns.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateCampainDto } from './dto/create-campain.dto';
@@ -56,12 +59,19 @@ export class CampaignsController {
   }
 
   @Patch(':id')
+  @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCampainDto: UpdateCampainDto,
     @Session() session: UserSession,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
-    return this.campainsService.update(id, updateCampainDto, session.user.id);
+    return this.campainsService.update(
+      id,
+      updateCampainDto,
+      session.user.id,
+      image,
+    );
   }
 
   @Delete(':id')

@@ -9,12 +9,16 @@ import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { UsersModule } from './users/users.module';
+import { S3Module } from './common/s3/s3.module';
 import * as path from 'path';
 import './common/helpers/handlebars.helpers';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     BullModule.forRoot({
       redis: {
         host: process.env.REDIS_HOST,
@@ -62,6 +66,7 @@ import './common/helpers/handlebars.helpers';
     PublicModule,
     LeadsModule,
     UsersModule,
+    S3Module,
   ],
 })
 export class AppModule {}

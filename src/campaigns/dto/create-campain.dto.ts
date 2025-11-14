@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum CampaignStatus {
@@ -32,15 +26,6 @@ export class CreateCampainDto {
   @IsString()
   @IsNotEmpty()
   description!: string;
-
-  @ApiPropertyOptional({
-    description: 'URL for the campaign image',
-    example: 'https://example.com/image.jpg',
-    format: 'uri',
-  })
-  @IsOptional()
-  @IsUrl()
-  imageUrl?: string;
 
   @ApiPropertyOptional({
     description: 'The status of the campaign',
