@@ -39,10 +39,12 @@ describe('PublicLeadsQueueService', () => {
       campaignSlug: 'campaign-x',
     };
 
+    const addSpy = jest.spyOn(queue, 'add');
+
     await service.sendWelcomeLeadEmail(data);
 
-    expect(queue.add.bind(queue)).toHaveBeenCalledTimes(1);
-    expect(queue.add.bind(queue)).toHaveBeenCalledWith(
+    expect(addSpy).toHaveBeenCalledTimes(1);
+    expect(addSpy).toHaveBeenCalledWith(
       'send-welcome-lead-email',
       data,
       expect.objectContaining({

@@ -52,8 +52,10 @@ describe('PublicLeadsQueueProcessor', () => {
 
     await processor.sendWelcomeLeadEmail(job);
 
-    expect(mailer.sendMail.bind(mailer)).toHaveBeenCalledTimes(1);
-    expect(mailer.sendMail.bind(mailer)).toHaveBeenCalledWith({
+    const sendMailSpy = jest.spyOn(mailer, 'sendMail');
+
+    expect(sendMailSpy).toHaveBeenCalledTimes(1);
+    expect(sendMailSpy).toHaveBeenCalledWith({
       to: jobData.email,
       from: 'Equipe ShareLock <noreply@sharelock.com>',
       subject: `Bem-vindo à ShareLock, ${jobData.name}!`,
@@ -88,7 +90,9 @@ describe('PublicLeadsQueueProcessor', () => {
 
     await expect(processor.sendWelcomeLeadEmail(job)).rejects.toThrow(error);
 
-    expect(mailer.sendMail.bind(mailer)).toHaveBeenCalledTimes(1);
+    const sendMailSpy = jest.spyOn(mailer, 'sendMail');
+
+    expect(sendMailSpy).toHaveBeenCalledTimes(1);
     expect(loggerErrorSpy).toHaveBeenCalledWith(
       expect.stringContaining('Failed to send welcome lead email'),
     );
