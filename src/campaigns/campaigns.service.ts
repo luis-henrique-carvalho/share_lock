@@ -7,6 +7,7 @@ import * as schema from 'src/common/drizzle/schema';
 import { Inject } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
 import { CacheService } from 'src/common/cache/cache.service';
+import { S3Service } from 'src/common/s3/s3.service';
 
 @Injectable()
 export class CampaignsService {
@@ -16,6 +17,9 @@ export class CampaignsService {
 
     @Inject(CacheService)
     private cache: CacheService,
+
+    @Inject(S3Service)
+    private s3: S3Service,
   ) {}
 
   async create(createCampainDto: CreateCampainDto, userId: string) {
@@ -93,12 +97,30 @@ export class CampaignsService {
     return campaign;
   }
 
-  async update(id: string, updateCampainDto: UpdateCampainDto, userId: string) {
-    await this.findOne(id, userId);
+  async update(
+    id: string,
+    updateCampainDto: UpdateCampainDto,
+    userId: string,
+    image?: Express.Multer.File,
+  ) {
+    const campaign = await this.findOne(id, userId);
+
+    let imageUrl: string | undefined;
+
+    if (image) {
+      const { url } = await this.s3.uploadFile(image, {
+        existingFileUrl: campaign.imageUrl as string | null,
+        path: 'campaign-images',
+      });
+      imageUrl = url;
+    }
 
     const [updatedCampaign] = await this.db
       .update(schema.campaign)
-      .set(updateCampainDto)
+      .set({
+        ...updateCampainDto,
+        ...(imageUrl && { imageUrl }),
+      })
       .where(eq(schema.campaign.id, id))
       .returning();
 
