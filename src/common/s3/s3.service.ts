@@ -64,6 +64,7 @@ export class S3Service {
       return;
     }
   }
+
   private getKeyFromUrl(url?: string | null): string | null {
     if (!url) {
       return null;
