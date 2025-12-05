@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { RewardsController } from './rewards.controller';
 import { RewardsService } from './rewards.service';
-import { CacheService } from '../../common/cache/cache.service';
+import { CacheService } from 'src/common/cache/cache.service';
 
 jest.mock('@thallesp/nestjs-better-auth', () => ({
   AuthGuard: jest.fn(),

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LeadsService } from './leads.service';
-import { CacheService } from '../common/cache/cache.service';
-import { DrizzleAsyncProvider } from '../common/drizzle/drizzle.provider';
+import { CacheService } from 'src/common/cache/cache.service';
+import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../common/drizzle/schema';
+import * as schema from 'src/common/drizzle/schema';
 
 describe('LeadsService', () => {
   let service: LeadsService;

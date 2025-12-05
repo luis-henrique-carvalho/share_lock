@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { S3Service } from '../common/s3/s3.service';
+import { S3Service } from 'src/common/s3/s3.service';
 import { CampaignsService } from './campaigns.service';
-import { CacheService } from '../common/cache/cache.service';
-import { DrizzleAsyncProvider } from '../common/drizzle/drizzle.provider';
+import { CacheService } from 'src/common/cache/cache.service';
+import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../common/drizzle/schema';
+import * as schema from 'src/common/drizzle/schema';
 import { CreateCampainDto } from './dto/create-campain.dto';
 import { UpdateCampainDto } from './dto/update-campain.dto';
 import { NotFoundException } from '@nestjs/common';

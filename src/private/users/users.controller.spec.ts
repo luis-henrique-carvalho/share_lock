@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CampaignsController } from './campaigns.controller';
-import { CampaignsService } from './campaigns.service';
-import { CacheService } from '../common/cache/cache.service';
-import { S3Service } from '../common/s3/s3.service';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import { CacheService } from 'src/common/cache/cache.service';
+import { S3Service } from 'src/common/s3/s3.service';
 
 jest.mock('@thallesp/nestjs-better-auth', () => ({
   AuthGuard: jest.fn(),
@@ -15,15 +15,14 @@ jest.mock('@thallesp/nestjs-better-auth', () => ({
     ): TypedPropertyDescriptor<any> | void =>
       descriptor,
 }));
-
-describe('CampaignsController', () => {
-  let controller: CampaignsController;
+describe('UsersController', () => {
+  let controller: UsersController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CampaignsController],
+      controllers: [UsersController],
       providers: [
-        CampaignsService,
+        UsersService,
         { provide: 'DrizzleAsyncProvider', useValue: {} },
         {
           provide: CacheService,
@@ -38,7 +37,7 @@ describe('CampaignsController', () => {
       ],
     }).compile();
 
-    controller = module.get<CampaignsController>(CampaignsController);
+    controller = module.get<UsersController>(UsersController);
   });
 
   it('should be defined', () => {
