@@ -23,7 +23,7 @@ async function bootstrap() {
     deepScanRoutes: true,
   });
 
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('docs', app, document, {
     swaggerOptions: {
       tagsSorter: 'alpha',
       operationsSorter: 'alpha',
