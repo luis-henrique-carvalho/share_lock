@@ -8,7 +8,6 @@ import { BullModule } from '@nestjs/bull';
 import { S3Module } from 'src/common/s3/s3.module';
 import { CacheModule } from 'src/common/cache/cache.module';
 import { DrizzleModule } from 'src/common/drizzle/drizzle.module';
-import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -18,12 +17,6 @@ import { RouterModule } from '@nestjs/core';
     DrizzleModule,
     S3Module,
     CacheModule,
-    RouterModule.register([
-      {
-        path: 'users',
-        module: UsersModule,
-      },
-    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService, SignUpHook, UsersQueueService, UsersQueueProcessor],

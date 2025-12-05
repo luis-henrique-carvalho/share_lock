@@ -15,14 +15,8 @@ import { S3Module } from 'src/common/s3/s3.module';
     S3Module,
     RouterModule.register([
       {
-        path: 'campaigns',
-        module: CampaignsModule,
-        children: [
-          {
-            path: '/:campaign_id/rewards',
-            module: RewardsModule,
-          },
-        ],
+        path: ':campaign_id/rewards',
+        module: RewardsModule,
       },
     ]),
   ],
