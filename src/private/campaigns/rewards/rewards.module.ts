@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { RewardsService } from './rewards.service';
 import { RewardsController } from './rewards.controller';
 
-import { DrizzleModule } from '../../common/drizzle/drizzle.module';
-import { CacheModule } from '../../common/cache/cache.module';
+import { DrizzleModule } from 'src/common/drizzle/drizzle.module';
+import { CacheModule } from 'src/common/cache/cache.module';
 
 @Module({
   imports: [DrizzleModule, CacheModule],

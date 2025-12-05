@@ -2,13 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@thallesp/nestjs-better-auth';
 import { auth } from './common/lib/auth';
-import { CampaignsModule } from './campaigns/campaigns.module';
 import { PublicModule } from './public/public.module';
-import { LeadsModule } from './leads/leads.module';
+import { PrivateModule } from './private/private.module';
 import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { UsersModule } from './users/users.module';
 import { S3Module } from './common/s3/s3.module';
 import * as path from 'path';
 import './common/helpers/handlebars.helpers';
@@ -62,10 +60,8 @@ import './common/helpers/handlebars.helpers';
       },
     }),
     AuthModule.forRoot({ auth }),
-    CampaignsModule,
+    PrivateModule,
     PublicModule,
-    LeadsModule,
-    UsersModule,
     S3Module,
   ],
 })
