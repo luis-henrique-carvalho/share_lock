@@ -17,50 +17,34 @@ describe('LeadsService', () => {
     del: jest.Mock;
   };
 
-  const mockLead = {
-    lead: {
-      id: 'lead-id-123',
-      campaignId: 'campaign-id-123',
-      email: 'test@example.com',
-      name: 'Test Lead',
-      referralCode: 'test-ref-code',
-      status: 'new' as const,
-      emailVerified: false,
-      verificationToken: 'test-token',
-      verificationTokenExpiresAt: new Date(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    campaign: {
-      id: 'campaign-id-123',
-      title: 'Test Campaign',
-      description: 'Test Description',
-      imageUrl: null,
-      slug: 'test-slug',
-      userId: 'user-123',
-      status: 'active' as const,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+  const mockLeadFlat = {
+    id: 'lead-id-123',
+    campaignId: 'campaign-id-123',
+    email: 'test@example.com',
+    name: 'Test Lead',
+    referralCode: 'test-ref-code',
+    status: 'new' as const,
+    emailVerified: false,
+    verificationToken: 'test-token',
+    verificationTokenExpiresAt: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   beforeEach(async () => {
-    // Mock the Drizzle query builder chain for select
+    const mockThen = jest
+      .fn()
+      .mockImplementation((callback: (value: unknown) => unknown) =>
+        callback([mockLeadFlat]),
+      );
+
     const mockLimit = jest.fn().mockReturnValue({
-      then: jest
-        .fn()
-        .mockImplementation((callback: (value: unknown) => unknown) =>
-          callback([mockLead]),
-        ),
+      then: mockThen,
     });
 
     const mockWhere = jest.fn().mockReturnValue({
       limit: mockLimit,
-      then: jest
-        .fn()
-        .mockImplementation((callback: (value: unknown) => unknown) =>
-          callback([mockLead]),
-        ),
+      then: mockThen,
     });
 
     const mockInnerJoin = jest.fn().mockReturnValue({
@@ -75,7 +59,6 @@ describe('LeadsService', () => {
       from: mockFrom,
     });
 
-    // Mock delete
     const mockDeleteWhere = jest.fn().mockResolvedValue(undefined);
 
     const mockDelete = jest.fn().mockReturnValue({
@@ -121,7 +104,7 @@ describe('LeadsService', () => {
   describe('findAll', () => {
     it('should return cached leads if available', async () => {
       const userId = 'user-123';
-      const cachedLeads = [mockLead];
+      const cachedLeads = [mockLeadFlat];
       mockCache.get.mockResolvedValue(cachedLeads);
 
       const result = await service.findAll(userId);
@@ -141,10 +124,10 @@ describe('LeadsService', () => {
       expect(mockDb.select).toHaveBeenCalled();
       expect(mockCache.set).toHaveBeenCalledWith(
         `leads:user:${userId}`,
-        [mockLead],
+        [mockLeadFlat],
         300,
       );
-      expect(result).toEqual([mockLead]);
+      expect(result).toEqual([mockLeadFlat]);
     });
 
     it('should filter leads by userId through campaign relation', async () => {
@@ -161,12 +144,12 @@ describe('LeadsService', () => {
     it('should return cached lead if available', async () => {
       const leadId = 'lead-id-123';
       const userId = 'user-123';
-      mockCache.get.mockResolvedValue(mockLead);
+      mockCache.get.mockResolvedValue(mockLeadFlat);
 
       const result = await service.findOne(leadId, userId);
 
       expect(mockCache.get).toHaveBeenCalledWith(`leed:${leadId}`);
-      expect(result).toEqual(mockLead);
+      expect(result).toEqual(mockLeadFlat);
       expect(mockDb.select).not.toHaveBeenCalled();
     });
 
@@ -181,10 +164,10 @@ describe('LeadsService', () => {
       expect(mockDb.select).toHaveBeenCalled();
       expect(mockCache.set).toHaveBeenCalledWith(
         `leed:${leadId}`,
-        mockLead,
+        mockLeadFlat,
         300,
       );
-      expect(result).toEqual(mockLead);
+      expect(result).toEqual(mockLeadFlat);
     });
 
     it('should filter by lead id and userId through campaign relation', async () => {
@@ -204,6 +187,9 @@ describe('LeadsService', () => {
       const userId = 'user-123';
       mockCache.get.mockResolvedValue(null);
 
+      // Mock findOne to return something so remove can proceed
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockLeadFlat as any);
+
       await service.remove(leadId, userId);
 
       expect(mockDb.delete).toHaveBeenCalledWith(schema.lead);
@@ -214,7 +200,9 @@ describe('LeadsService', () => {
     it('should call findOne to verify lead exists before deletion', async () => {
       const leadId = 'lead-id-123';
       const userId = 'user-123';
-      const findOneSpy = jest.spyOn(service, 'findOne');
+      const findOneSpy = jest
+        .spyOn(service, 'findOne')
+        .mockResolvedValue(mockLeadFlat as any);
       mockCache.get.mockResolvedValue(null);
 
       await service.remove(leadId, userId);
@@ -225,7 +213,8 @@ describe('LeadsService', () => {
     it('should invalidate both individual lead cache and user leads list cache', async () => {
       const leadId = 'lead-id-123';
       const userId = 'user-123';
-      mockCache.get.mockResolvedValue(mockLead);
+      jest.spyOn(service, 'findOne').mockResolvedValue(mockLeadFlat as any);
+      mockCache.get.mockResolvedValue(mockLeadFlat);
 
       await service.remove(leadId, userId);
 

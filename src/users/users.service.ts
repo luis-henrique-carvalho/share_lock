@@ -5,7 +5,7 @@ import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from 'src/common/drizzle/schema';
 import { eq } from 'drizzle-orm';
-import { UpdateUserDto } from './dto/update-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto';
 import { S3Service } from 'src/common/s3/s3.service';
 
 @Injectable()

@@ -220,7 +220,7 @@ describe('UsersService', () => {
       expect(result).toEqual(mockUser);
     });
 
-    it('should invalidate user cache on update', async () => {
+    it('should update user cache on update', async () => {
       const userId = 'user-123';
       const updateUserDto: Partial<UpdateUserDto> = { name: 'Updated Name' };
       const updatedUserMock = { ...mockUser, name: 'Updated Name' };

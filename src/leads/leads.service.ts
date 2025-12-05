@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import * as schema from 'src/common/drizzle/schema';
 import { Inject } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, getTableColumns } from 'drizzle-orm';
 import { CacheService } from 'src/common/cache/cache.service';
 import { DrizzleAsyncProvider } from 'src/common/drizzle/drizzle.provider';
 
@@ -25,7 +25,7 @@ export class LeadsService {
     }
 
     const leads = await this.db
-      .select()
+      .select(getTableColumns(schema.lead))
       .from(schema.lead)
       .innerJoin(
         schema.campaign,
@@ -47,7 +47,7 @@ export class LeadsService {
     }
 
     const lead = await this.db
-      .select()
+      .select(getTableColumns(schema.lead))
       .from(schema.lead)
       .innerJoin(
         schema.campaign,

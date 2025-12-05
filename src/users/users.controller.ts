@@ -25,7 +25,7 @@ export class UsersController {
   update(
     @Body() updateUserDto: UpdateUserDto,
     @Session() session: UserSession,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
     return this.usersService.update(session.user.id, updateUserDto, image);
   }

@@ -1,7 +1,7 @@
 import * as schema from 'src/common/drizzle/schema';
 
-type Campaign = typeof schema.campaign.$inferSelect;
+type Reward = typeof schema.reward.$inferSelect;
 
-type CampaignInsert = typeof schema.campaign.$inferInsert;
+type RewardInsert = typeof schema.reward.$inferInsert;
 
-export { Campaign, CampaignInsert };
+export { Reward, RewardInsert };
