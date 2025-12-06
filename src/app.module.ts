@@ -8,6 +8,7 @@ import { BullModule } from '@nestjs/bull';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { S3Module } from './common/s3/s3.module';
+import { AbacatePayModule } from './common/abacate-pay/abacate-pay.module';
 import * as path from 'path';
 import './common/helpers/handlebars.helpers';
 
@@ -63,6 +64,7 @@ import './common/helpers/handlebars.helpers';
     PrivateModule,
     PublicModule,
     S3Module,
+    AbacatePayModule,
   ],
 })
 export class AppModule {}
