@@ -3,12 +3,14 @@ import { RouterModule } from '@nestjs/core';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { LeadsModule } from './leads/leads.module';
 import { UsersModule } from './users/users.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
     CampaignsModule,
     LeadsModule,
     UsersModule,
+    PaymentsModule,
     RouterModule.register([
       {
         path: 'private',
@@ -25,6 +27,10 @@ import { UsersModule } from './users/users.module';
           {
             path: 'users',
             module: UsersModule,
+          },
+          {
+            path: 'payments',
+            module: PaymentsModule,
           },
         ],
       },
