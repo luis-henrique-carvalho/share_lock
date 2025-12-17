@@ -43,6 +43,13 @@
       "when": 1761273765373,
       "tag": "0005_salty_fabian_cortez",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1765940882058,
+      "tag": "0006_gray_viper",
+      "breakpoints": true
     }
   ]
 }

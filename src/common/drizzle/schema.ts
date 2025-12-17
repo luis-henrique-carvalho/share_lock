@@ -26,6 +26,66 @@ export const user = pgTable('user', {
     .notNull(),
 });
 
+export const subscriptionStatusEnum = pgEnum('subscription_status', [
+  'active',
+  'canceled',
+  'incomplete',
+  'incomplete_expired',
+  'past_due',
+  'paused',
+  'trialing',
+  'unpaid',
+]);
+
+export const subscription = pgTable(
+  'subscription',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .unique()
+      .references(() => user.id, { onDelete: 'cascade' }),
+
+    providerCustomerId: text('provider_customer_id').notNull(),
+    providerSubscriptionId: text('provider_subscription_id').notNull().unique(),
+    providerPriceId: text('provider_price_id').notNull(),
+    provider: text('provider').notNull().default('stripe'), // 'stripe', 'paddle', 'lemonsqueezy', etc.
+
+    status: subscriptionStatusEnum('status').notNull(),
+    currentPeriodStart: timestamp('current_period_start').notNull(),
+    currentPeriodEnd: timestamp('current_period_end').notNull(),
+
+    cancelAtPeriodEnd: boolean('cancel_at_period_end').default(false).notNull(),
+    canceledAt: timestamp('canceled_at'),
+
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at')
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  (table) => [
+    index('idx_subscription_customer').on(table.providerCustomerId),
+    index('idx_subscription_status').on(table.status),
+    index('idx_subscription_provider').on(table.provider),
+  ],
+);
+
+export const subscriptionRelations = relations(subscription, ({ one }) => ({
+  user: one(user, {
+    fields: [subscription.userId],
+    references: [user.id],
+  }),
+}));
+
+export const userRelations = relations(user, ({ one, many }) => ({
+  subscription: one(subscription, {
+    fields: [user.id],
+    references: [subscription.userId],
+  }),
+  campaigns: many(campaign),
+}));
+
 export const session = pgTable('session', {
   id: uuid('id').primaryKey().defaultRandom(),
   expiresAt: timestamp('expires_at').notNull(),
